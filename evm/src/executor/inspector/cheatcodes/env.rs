@@ -244,12 +244,8 @@ pub fn apply<DB: Database>(
         HEVMCalls::SetNonce(inner) => {
             with_journaled_account(&mut data.journaled_state, data.db, inner.0, |account| {
                 // nonce must increment only
-                if account.info.nonce < inner.1 {
-                    account.info.nonce = inner.1;
-                    Ok(Bytes::new())
-                } else {
-                    Err(format!("Nonce lower than account's current nonce. Please provide a higher nonce than {}", account.info.nonce).encode().into())
-                }
+                account.info.nonce = inner.1;
+                Ok(Bytes::new())
             })
         }
         HEVMCalls::GetNonce(inner) => {
